@@ -24,20 +24,39 @@ platform:
   none: {}
 fips: {{ fips_compliant }}
 sshKey: '{{ install_config.public_ssh_key }}'
-{% if enable_local_registry %}
 pullSecret: '{{ lookup('file', '~/.openshift/pull-secret-updated') }}'
 additionalTrustBundle: |
-{{ lookup('file', '/opt/registry/certs/domain.crt') | indent(2, first=True) }}
+  -----BEGIN CERTIFICATE-----
+  MIID+jCCAuKgAwIBAgIUGL3bM3jZLfkO1mSlU2m9EbTZs0MwDQYJKoZIhvcNAQEL
+  BQAwbjELMAkGA1UEBhMCWFgxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UE
+  CgwTRGVmYXVsdCBDb21wYW55IEx0ZDEqMCgGA1UEAwwhc29uaWEtcXVheS5wb2tw
+  cnYuc3RnbGFicy5pYm0uY29tMB4XDTI1MDQyMjExMjExMVoXDTI2MDQxMzExMjEx
+  MVowbjELMAkGA1UEBhMCWFgxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UE
+  CgwTRGVmYXVsdCBDb21wYW55IEx0ZDEqMCgGA1UEAwwhc29uaWEtcXVheS5wb2tw
+  cnYuc3RnbGFicy5pYm0uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+  AQEAu90luJVqYUMP5izTNLWyr0SSBrnodZiYL7DV6dN9ezJr4blEkqracxm1dhO4
+  dwj3PMuHTjbA4rk34P2TaWJSXCwWs/vhvsS4XmiUL1apYG5zS90INpOwKlWjZCAA
+  CLyeYfiJCuthyx7vrTfg5DPc64ccO18Flx+lWbQdi3l+VtsuwtUwiAXXIltW6kjY
+  kwA0tJ6DIWQdmDi6EVNXMoIxSKlJrKcK2yNKozwS+XLOvKriFokRnkWppNEoGh/B
+  si3nzNKXd6umcC+9IEkCfoAzUhWjit+TK5Kn9AcBRYZSeePcMva9OiSAUs+BaOIX
+  Yb4qX9gDNFe7DMjdSBNiCGS61QIDAQABo4GPMIGMMAkGA1UdEwQCMAAwCwYDVR0P
+  BAQDAgXgMDIGA1UdEQQrMCmCIXNvbmlhLXF1YXkucG9rcHJ2LnN0Z2xhYnMuaWJt
+  LmNvbYcEChSwFjAdBgNVHQ4EFgQUwUDdMYPmyYpLtCEoIDbJaS6s680wHwYDVR0j
+  BBgwFoAU/CDcxAJtmnSBYn1SNpQ5Vct996MwDQYJKoZIhvcNAQELBQADggEBAJQY
+  eeiVQO1iYHZ0xJRGxmDvyF1umnnmN53YSNe3SHi4T544HQFA0D5Kt+09EMFIQ9zh
+  1AvAzDnvFazC9H+1NhH1QWVEtGT3qUVJB49EbGh+5hbkYfk4w3ZDVB1rGCSl8J6j
+  BeUgQ2P9FZeDXeSXh0MO4xTQLWsplugNaCKAC6koyCXSBDFcw7mS5LuC7GMl5lsR
+  1zUtpkmbG0mpZXnpxERzRZ+DGBNIXDue1MaRs8RB1CSJRDA7enbxrNXDbOL9lr7f
+  Xq72uW5ASsTG1UAA8q4oaWzzshFyk5++hHirfCnYrH2b7dnKCj4vNazaXsos8UZI
+  tBLQR+t9RiDTMPbl+jc=
+  -----END CERTIFICATE-----
 imageContentSources:
 - mirrors:
-  - registry.{{ install_config.cluster_id }}.{{ install_config.cluster_domain }}:5000/ocp4/openshift4
+  - sonia-quay.pokprv.stglabs.ibm.com:8443/ocp4/openshift4
   source: quay.io/openshift-release-dev/ocp-release
 - mirrors:
-  - registry.{{ install_config.cluster_id }}.{{ install_config.cluster_domain }}:5000/ocp4/openshift4
+  - sonia-quay.pokprv.stglabs.ibm.com:8443/ocp4/openshift4
   source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
-{% else %}
-pullSecret: '{{ install_config.pull_secret }}'
-{% endif %}
 {% if setup_squid_proxy or proxy_url != "" %}
 proxy:
   httpProxy: {{ squid_proxy_url | default(proxy_url) }}
