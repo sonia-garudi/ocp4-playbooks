@@ -12,6 +12,8 @@
   copy:
     src: /etc/ssl/certs/quay.crt
     dest: /etc/ssl/certs/quay.crt
+  become: yes
+  become_user: core
 
 - name: Configure node
   shell: |
