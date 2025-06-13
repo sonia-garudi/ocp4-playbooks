@@ -8,8 +8,14 @@
     connect_timeout: 15
     timeout: "{{ node_connection_timeout }}"
 
+- name: Copy crt file
+  copy:
+    src: /etc/ssl/certs/quay.crt
+    dest: /etc/ssl/certs/quay.crt
+
 - name: Configure node
   shell: |
+    sudo update-ca-trust
     if lsmod|grep -q 'ibmveth'; then
       sudo sysctl -w net.ipv4.route.min_pmtu=1450;
       sudo sysctl -w net.ipv4.ip_no_pmtu_disc=1;
